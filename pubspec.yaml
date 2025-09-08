@@ -1,0 +1,36 @@
+name: veg_nonveg_calendar
+description: A Veg/Non-Veg Decision Calendar App for managing dietary choices based on cultural, religious, and personal rules.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  table_calendar: ^3.0.9
+  shared_preferences: ^2.2.2
+  provider: ^6.1.1
+  intl: ^0.18.1
+  flutter_local_notifications: ^17.1.2
+  http: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Bold.ttf
+          weight: 700
