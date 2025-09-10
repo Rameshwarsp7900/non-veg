@@ -1,12 +1,11 @@
-'use client'
-
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase'
+import { createSupabaseClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/Button'
 import DateEditorModal from '@/components/DateEditorModal'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatDate, getCalendarDays, isSameDayHelper, isTodayHelper } from '@/utils/dateUtils'
 import { DietEvent, RestrictionType } from '@/types'
+import { DietIcon } from '@/utils/icons'
 
 interface CalendarViewProps {
   userId: string
@@ -20,7 +19,7 @@ export default function CalendarView({ userId }: CalendarViewProps) {
   const [showDateEditor, setShowDateEditor] = useState(false)
   const [loading, setLoading] = useState(true)
   
-  const supabase = createClient()
+  const supabase = createSupabaseClient()
 
   useEffect(() => {
     loadData()
@@ -67,7 +66,6 @@ export default function CalendarView({ userId }: CalendarViewProps) {
         return {
           restriction: RestrictionType.VEG_ONLY,
           color: 'bg-vegOnly-100 border-vegOnly-300 text-vegOnly-800',
-          icon: '❌'
         }
       }
       
@@ -76,7 +74,6 @@ export default function CalendarView({ userId }: CalendarViewProps) {
         return {
           restriction: RestrictionType.CONDITIONAL,
           color: 'bg-conditional-100 border-conditional-300 text-conditional-800',
-          icon: '⚠️'
         }
       }
     }
@@ -90,7 +87,6 @@ export default function CalendarView({ userId }: CalendarViewProps) {
       return {
         restriction: RestrictionType.VEG_ONLY,
         color: 'bg-vegOnly-100 border-vegOnly-300 text-vegOnly-800',
-        icon: '❌'
       }
     }
     
@@ -98,7 +94,6 @@ export default function CalendarView({ userId }: CalendarViewProps) {
     return {
       restriction: RestrictionType.NON_VEG_ALLOWED,
       color: 'bg-primary-100 border-primary-300 text-primary-800',
-      icon: '✅'
     }
   }
 
@@ -143,15 +138,15 @@ export default function CalendarView({ userId }: CalendarViewProps) {
       {/* Legend */}
       <div className="flex justify-center space-x-6 mb-6 p-4 bg-gray-50 rounded-lg">
         <div className="flex items-center">
-          <span className="text-lg mr-2">✅</span>
+          <DietIcon restriction={RestrictionType.NON_VEG_ALLOWED} size={20} className="mr-2" />
           <span className="text-sm text-primary-700">Non-Veg OK</span>
         </div>
         <div className="flex items-center">
-          <span className="text-lg mr-2">❌</span>
+          <DietIcon restriction={RestrictionType.VEG_ONLY} size={20} className="mr-2" />
           <span className="text-sm text-vegOnly-700">Veg Only</span>
         </div>
         <div className="flex items-center">
-          <span className="text-lg mr-2">⚠️</span>
+          <DietIcon restriction={RestrictionType.CONDITIONAL} size={20} className="mr-2" />
           <span className="text-sm text-conditional-700">Conditional</span>
         </div>
       </div>
@@ -188,7 +183,7 @@ export default function CalendarView({ userId }: CalendarViewProps) {
               <div className="flex flex-col items-center">
                 <span>{date.getDate()}</span>
                 {isCurrentMonth && (
-                  <span className="text-xs">{dayStatus.icon}</span>
+                  <DietIcon restriction={dayStatus.restriction} size={12} />
                 )}
               </div>
             </button>
@@ -217,7 +212,7 @@ export default function CalendarView({ userId }: CalendarViewProps) {
                 {/* Current Status */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="text-lg mr-2">{status.icon}</span>
+                    <DietIcon restriction={status.restriction} size={20} className="mr-2" />
                     <span className="text-sm text-blue-800">
                       {status.restriction === RestrictionType.VEG_ONLY ? 'Vegetarian Only' :
                        status.restriction === RestrictionType.CONDITIONAL ? 'Conditional Restrictions' :
@@ -228,7 +223,7 @@ export default function CalendarView({ userId }: CalendarViewProps) {
                   <Button
                     size="sm"
                     onClick={() => setShowDateEditor(true)}
-                    className="btn-primary"
+                    variant="primary"
                   >
                     Edit Day
                   </Button>

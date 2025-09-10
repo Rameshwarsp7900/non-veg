@@ -1,8 +1,6 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase'
+import { createSupabaseClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/Button'
 import CalendarView from '@/components/CalendarView'
 import TodayStatus from '@/components/TodayStatus'
@@ -13,6 +11,7 @@ import { Calendar, CalendarDays, Settings, MessageCircle, LogOut, User as UserIc
 import { RestrictionType } from '@/types'
 import { formatDate } from '@/utils/dateUtils'
 import { getDefaultEvents, getDefaultWeeklyRules } from '@/utils/defaultEvents'
+import { GenericIcon, getCalendarIcon } from '@/utils/icons'
 
 interface DashboardProps {
   user: User
@@ -20,11 +19,11 @@ interface DashboardProps {
 
 type TabType = 'calendar' | 'events' | 'rules' | 'chat' | 'settings'
 
-export default function DashboardComponent({ user }: DashboardProps) {
+export default function Dashboard({ user }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<TabType>('calendar')
   const [userProfile, setUserProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const supabase = createSupabaseClient()
 
   useEffect(() => {
     initializeUser()
@@ -106,7 +105,6 @@ export default function DashboardComponent({ user }: DashboardProps) {
       return {
         restriction: RestrictionType.VEG_ONLY,
         reason: `${weekday === 2 ? 'Tuesday' : 'Saturday'} - Hanuman's day (traditional restriction)`,
-        iconText: '❌',
         statusText: 'Veg Only'
       }
     }
@@ -114,7 +112,6 @@ export default function DashboardComponent({ user }: DashboardProps) {
     return {
       restriction: RestrictionType.NON_VEG_ALLOWED,
       reason: 'No restrictions apply today',
-      iconText: '✅',
       statusText: 'Non-Veg OK'
     }
   }
@@ -142,7 +139,7 @@ export default function DashboardComponent({ user }: DashboardProps) {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">🗓️</span>
+                <GenericIcon src={getCalendarIcon()} size={20} alt="Calendar" className="filter invert" />
               </div>
               <h1 className="ml-3 text-xl font-semibold text-gray-900">
                 Veg/Non-Veg Calendar
